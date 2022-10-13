@@ -16,9 +16,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     }
 
     private void insert(RedBlackNode<T> node, T item) {
-        //если вставляемый элемент меньше текущего - идем налево
         if (node.data.compareTo(item) >= 0) {
-            //доходим до листов дерева
             if (node.left != null) {
                 insert(node.left, item);
             } else {
@@ -29,33 +27,25 @@ public class RedBlackTree<T extends Comparable<T>> {
         } else if (node.right != null) {
             insert(node.right, item);
         } else {
-            //создаем новый элемент
             RedBlackNode<T> inserted = new RedBlackNode<T>(item);
             node.setRight(inserted);
-            //после вставки балансируем дерево, чтобы выполнились условия RBTree
             balanceAfterInsert(inserted);
         }
     }
 
     private void balanceAfterInsert(RedBlackNode<T> node) {
-        //если вставляем корень или родитель черный, то балансировка не нужна
         if (node == null || node == this.root || RedBlackNode.isBlack(node.parent)) {
             return;
         }
-        //если брат родителя красный
         if (RedBlackNode.isRed(node.getUncle())) {
-            //меняем цвета: родителя, брата родителя, дедушки
             RedBlackNode.swapColor(node.parent);
             RedBlackNode.swapColor(node.getUncle());
             RedBlackNode.swapColor(node.getGrandparent());
-            //рекусивно повторяем для дедушки
+
             balanceAfterInsert(node.getGrandparent());
         } else if (node.getGrandparent().left == node.parent) {
-            //если вставка в левую ветвь дедушки
             if (node.parent.right == node) {
-                //если вставка в правую ветвь родителя
                 node = node.parent;
-                //поворачиваем налево
                 rotateLeft(node);
             }
             RedBlackNode.setColor(node.parent, RedBlackNode.BLACK);
@@ -90,11 +80,9 @@ public class RedBlackTree<T extends Comparable<T>> {
     }
 
     private void rotateLeft(RedBlackNode<T> node) {
-        //если нет правой ноды, то выходим
         if (node.right == null) {
             return;
         }
-        //копируем правую часть
         RedBlackNode<T> rightTree = node.right;
         node.setRight(rightTree.left);
         if (node.parent == null) {

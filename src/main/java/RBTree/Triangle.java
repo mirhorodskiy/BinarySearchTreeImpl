@@ -56,12 +56,17 @@ public class Triangle implements Comparable<Triangle> {
 //    }
     @Override
     public String toString() {
-        //return String.valueOf(this.perimeter());
         return String.format("%.2f", this.perimeter());
     }
 
     @Override
     public int compareTo(Triangle o) {
-        return (int) (this.perimeter() - o.perimeter());
+        if (this.perimeter() - o.perimeter() < 0) {
+            return - 1;
+        }
+        if (this.perimeter() - o.perimeter() > 0) {
+            return 1;
+        }
+        return 0;
     }
 }
